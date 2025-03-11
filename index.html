@@ -1,0 +1,31 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+
+<meta charset="utf-8"> 
+
+<head> 
+  <title>Weather App</title>
+</head>
+
+<body>
+  <h3>Weather app brought to you by Open weather app.</h3>
+
+  <div> 
+    <form method="POST"> 
+      <input type="text" name="city" placeholder="Enter city name" required> 
+      <button type="submit">Get weather!</button>
+    </form>
+
+    {% if weather_data %} 
+    <div>
+      <p>{{ weather_data['weather'][0]['description'] }}</p>
+      <p>Temperature: {{ weather_date['main']['temp'] }} °C</p>
+    </div>
+    {% elif weather_data is not none %}
+    <p>City not found. Please try again.</p>
+    {% endif %} 
+    
+  </div>
+</body>
+
+</html>
