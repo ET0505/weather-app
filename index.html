@@ -19,7 +19,7 @@
     {% if weather_data %} 
     <div>
       <p>{{ weather_data['weather'][0]['description'] }}</p>
-      <p>Temperature: {{ weather_date['main']['temp'] }} °C</p>
+      <p>Temperature: {{ weather_data['main']['temp'] }} °C</p>
     </div>
     {% elif weather_data is not none %}
     <p>City not found. Please try again.</p>
