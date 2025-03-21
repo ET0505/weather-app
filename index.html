@@ -1,31 +1,56 @@
 <!DOCTYPE html> 
 <html lang="en"> 
 
-<meta charset="utf-8"> 
-
 <head> 
-  <title>Weather App</title>
+  <title>Weather Application</title>
+  <meta charset="utf-8"> 
 </head>
 
 <body>
-  <h3>Weather app brought to you by Open weather app.</h3>
 
+  <center><h1>A weather app by Edward Truong using Open Weather Map and Google Maps</h1></center>
+
+  <!-- Divider to prompt the user for a city and retreive the weather -->
   <div> 
     <form method="POST"> 
-      <input type="text" name="city" placeholder="Enter city name" required> 
-      <button type="submit">Get weather!</button>
+      <center>
+        <input type="text" name="city" placeholder="Please enter the city name..." required> 
+        <br><br>
+        <button type="submit">Get weather!</button>
+      </center>
     </form>
+
+    <br>
 
     {% if weather_data %} 
     <div>
-      <p>{{ weather_data['weather'][0]['description'] }}</p>
-      <p>Temperature: {{ weather_data['main']['temp'] }} °C</p>
+      <center>
+      <!-- Can also use request.form.city to display the city -->
+      <p><b>City: </b> {{ weather_data.city }}</p>
+      <p><b>Temperature: </b> {{ weather_data.temperature }} °C &nbsp;&nbsp; <b>Feels like: </b> {{ weather_data.feels_like }}</p>
+      <p><b>Minimum temperature: </b> {{ weather_data.min_temp }} °C &nbsp;&nbsp; <b>Maximim temperature:</b> {{ weather_data.max_temp }} °C</p>
+      <p><b>Description: </b> <span id="description"> {{ weather_data.description }} </span></p>
+      <p><b>Country: </b> {{ weather_data.country  }}</p>
+
+      <p><b>Current time: </b><span id="datetime"></span></p>
+      <script>
+        var now = new Date();
+        var time = now.toLocaleTimeString();
+        var date = now.toLocaleDateString();
+
+        document.getElementById("datetime").innerHTML = time + ", " + date;
+      </script>
+      </center>
     </div>
-    {% elif weather_data is not none %}
-    <p>City not found. Please try again.</p>
+
+    {% elif request.method == "POST" %}
+    <center><p><b>City not found. Please try again.</b></p></center>
+
     {% endif %} 
-    
   </div>
+
 </body>
+
+</html>
 
 </html>
