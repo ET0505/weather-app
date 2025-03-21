@@ -1,0 +1,56 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+
+<head> 
+  <title>Weather Application</title>
+  <meta charset="utf-8"> 
+</head>
+
+<body>
+
+  <center><h1>A weather app by Edward Truong using Open Weather Map and Google Maps</h1></center>
+
+  <!-- Divider to prompt the user for a city and retreive the weather -->
+  <div> 
+    <form method="POST"> 
+      <center>
+        <input type="text" name="city" placeholder="Please enter the city name..." required> 
+        <br><br>
+        <button type="submit">Get weather!</button>
+      </center>
+    </form>
+
+    <br>
+
+    {% if weather_data %} 
+    <div>
+      <center>
+      <!-- Can also use request.form.city to display the city -->
+      <p><b>City: </b> {{ weather_data.city }}</p>
+      <p><b>Temperature: </b> {{ weather_data.temperature }} °C &nbsp;&nbsp; <b>Feels like: </b> {{ weather_data.feels_like }}</p>
+      <p><b>Minimum temperature: </b> {{ weather_data.min_temp }} °C &nbsp;&nbsp; <b>Maximim temperature:</b> {{ weather_data.max_temp }} °C</p>
+      <p><b>Description: </b> <span id="description"> {{ weather_data.description }} </span></p>
+      <p><b>Country: </b> {{ weather_data.country  }}</p>
+
+      <p><b>Current time: </b><span id="datetime"></span></p>
+      <script>
+        var now = new Date();
+        var time = now.toLocaleTimeString();
+        var date = now.toLocaleDateString();
+
+        document.getElementById("datetime").innerHTML = time + ", " + date;
+      </script>
+      </center>
+    </div>
+
+    {% elif request.method == "POST" %}
+    <center><p><b>City not found. Please try again.</b></p></center>
+
+    {% endif %} 
+  </div>
+
+</body>
+
+</html>
+
+</html>
