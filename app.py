@@ -3,31 +3,41 @@ import requests
 
 app = Flask(__name__)
 
-# API key
-app.key = "77c62ab46f506f753e48c6fd6cf5f083"
+# API keys
+WEATHER_API_KEY = "77c62ab46f506f753e48c6fd6cf5f083"
 
 # Decorator 
 @app.route('/', methods = ["GET", "POST"]) 
 
-
 def index(): 
   weather_data = None
+
+  # Sumbitting data to the server 
   if request.method == "POST":
     city = request.form.get("city")
-    if city:
-      url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={app.key}&units=metric"
 
-      response = requests.get(url)
+    # if valid city then retrieve data from url
+    if city:
+      url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={WEATHER_API_KEY}&units=metric"
+
+      response = requests.get(url).json()
 
       # 200 OK status successful 
-      if response.status_code == 200:
-        weather_data = response.json()
-    
+      if response.get("cod") == 200:
+        weather_data = {
+          "temperature": response["main"]["temp"],
+          "description": response["weather"][0]["description"],
+          "country": response["sys"]["country"],
+          "city": response["name"],
+          "feels_like": response["main"]["feels_like"],
+          "min_temp": response["main"]["temp_min"],
+          "max_temp": response["main"]["temp_max"]
+        }
+
       else:
         weather_data = None
-  
 
-  return render_template("index.html", weather_data = weather_data) 
+  return render_template("index.html", weather_data = weather_data, maps_key = MAPS_API_KEY) 
 
 
 if __name__ == "__main__":
