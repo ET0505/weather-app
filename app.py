@@ -4,8 +4,8 @@ import requests
 app = Flask(__name__)
 
 # API keys
-WEATHER_API_KEY = "77c62ab46f506f753e48c6fd6cf5f083"
-MAPS_API_KEY = "AIzaSyCOw_xZ5tkEm8rmtFQLLM_bScAT85eBZLk"
+WEATHER_API_KEY = "API KEY"
+MAPS_API_KEY = "API KEY"
 
 # Decorator 
 @app.route('/', methods = ["GET", "POST"]) 
