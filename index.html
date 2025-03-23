@@ -6,7 +6,17 @@
   <meta charset="utf-8"> 
 </head>
 
-<body>
+<style>
+  h1 {font-family: Arial, Helvetica, sans-serif; color: #01084d;}
+  p {font-family: Arial, Helvetica, sans-serif; color: black}
+  input {text-align: center; width: 450px}
+  button {width: 450px;}
+
+  #description {text-transform: capitalize;}
+</style>
+
+
+<body onload="initMap()">
 
   <center><h1>A weather app by Edward Truong using Open Weather Map and Google Maps</h1></center>
 
@@ -25,6 +35,7 @@
     {% if weather_data %} 
     <div>
       <center>
+
       <!-- Can also use request.form.city to display the city -->
       <p><b>City: </b> {{ weather_data.city }}</p>
       <p><b>Temperature: </b> {{ weather_data.temperature }} °C &nbsp;&nbsp; <b>Feels like: </b> {{ weather_data.feels_like }}</p>
@@ -33,12 +44,26 @@
       <p><b>Country: </b> {{ weather_data.country  }}</p>
 
       <p><b>Current time: </b><span id="datetime"></span></p>
+      
       <script>
-        var now = new Date();
-        var time = now.toLocaleTimeString();
-        var date = now.toLocaleDateString();
+        function getUTCTime() {
+          return Date.now(); 
+        }
 
-        document.getElementById("datetime").innerHTML = time + ", " + date;
+        function shiftToLocalTime(shiftInSeconds, utcTime) {
+          var localTime = new Date(utcTime - (39600 * 1000)+ (shiftInSeconds * 1000)); // account for sydney time 
+          return localTime.toLocaleTimeString("en-us", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: '2-digit',
+            hour12: true
+          });
+        }
+        
+        var timeShift = {{ weather_data.timezone }};
+        var timeNow = getUTCTime();
+
+        document.getElementById("datetime").innerHTML = shiftToLocalTime(timeShift, timeNow);
       </script>
       </center>
     </div>
@@ -49,8 +74,30 @@
     {% endif %} 
   </div>
 
-</body>
+  <br>
 
-</html>
+  <div id="map" style="width:100%; height:500px;"></div>
+
+  <script async 
+    src="https://maps.googleapis.com/maps/api/js?key={{ maps_key }}&loading=async&callback=initMap">
+  </script>
+
+  <script> 
+
+    google.maps.importLibrary("maps");
+    google.maps.importLibrary("marker");
+
+    function initMap() {
+      var location = { lat: {{ weather_data.latitude }}, lng: {{ weather_data.longitude }} };
+      var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 15,
+        center: location
+      });
+
+    }
+  </script>
+
+
+</body>
 
 </html>
