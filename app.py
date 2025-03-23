@@ -5,6 +5,7 @@ app = Flask(__name__)
 
 # API keys
 WEATHER_API_KEY = "77c62ab46f506f753e48c6fd6cf5f083"
+MAPS_API_KEY = "AIzaSyCOw_xZ5tkEm8rmtFQLLM_bScAT85eBZLk"
 
 # Decorator 
 @app.route('/', methods = ["GET", "POST"]) 
@@ -25,17 +26,23 @@ def index():
       # 200 OK status successful 
       if response.get("cod") == 200:
         weather_data = {
+          "latitude": response["coord"]["lat"],
+          "longitude": response["coord"]["lon"],
           "temperature": response["main"]["temp"],
           "description": response["weather"][0]["description"],
           "country": response["sys"]["country"],
           "city": response["name"],
           "feels_like": response["main"]["feels_like"],
           "min_temp": response["main"]["temp_min"],
-          "max_temp": response["main"]["temp_max"]
+          "max_temp": response["main"]["temp_max"],
         }
+
+        print(response)
 
       else:
         weather_data = None
+
+      #make a drop down menu for the cities 
 
   return render_template("index.html", weather_data = weather_data, maps_key = MAPS_API_KEY) 
 
